@@ -7,11 +7,11 @@ import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Badge } from "@/components/ui/badge"
-import { ProductDialog } from "./product-dialog"
 import { AlertModal } from "./alert-modal"
 import { deleteProduct } from "../actions"
 import Image from "next/image"
 import useSWR from "swr"
+import { ProductDialog } from "./product-dialog"
 
 // Fetcher pour SWR
 const fetcher = (url: string) => fetch(url).then((res) => res.json())
