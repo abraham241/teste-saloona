@@ -2,7 +2,7 @@ export default async function Blogs() {
 
     return (
         <div>
-            Blogs
+            Blogsssss
         </div>
     )
 }
