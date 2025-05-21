@@ -152,7 +152,7 @@ model OrganizationDepartment {
 model Department {
   id    String @id @default(cuid())
   label String
-  icon  String
+  icon  String?
 
   organisations OrganizationDepartment[]
   services      Service[] // un service appartient à un département
@@ -330,6 +330,9 @@ model Category {
 
   products   Product[]
 }
+
+
+
 
 // Ajouter ces champs au modèle Order pour stocker les informations supplémentaires
 model Order {
