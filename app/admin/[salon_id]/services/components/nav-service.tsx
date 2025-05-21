@@ -1,7 +1,7 @@
 "use client"
 
 import { motion } from "framer-motion"
-import { ArrowLeft, Calendar, Package, ShoppingCart, Tag } from "lucide-react"
+import { ArrowLeft, Book, Calendar, Package, ShoppingCart, Tag } from "lucide-react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { useEffect, useState } from "react"
@@ -19,6 +19,7 @@ const NavService = ({salonId}:NavServiceProps) => {
     const isServiceActive = pathname === `/admin/${salonId}/services`
     const isDepartmentActive = pathname === `/admin/${salonId}/services/departments`
     const isAvabilityActive = pathname === `/admin/${salonId}/services/avability`
+    const isBlogActive = pathname === `/admin/${salonId}/services/blogs`
   
     useEffect(() => {
       setIsMounted(true)
@@ -82,6 +83,17 @@ const NavService = ({salonId}:NavServiceProps) => {
         >
           <Calendar className="h-4 w-4 mr-2" />
           Disponibilités
+        </Link>
+        <Link
+          href={`/admin/${salonId}/services/blogs`}
+          className={`flex items-center px-2 py-3 text-sm font-medium whitespace-nowrap border-b-2 ${
+            isBlogActive
+              ? "border-amber-500 text-amber-600"
+              : "border-transparent text-gray-600 hover:text-amber-600 hover:border-amber-200"
+          }`}
+        >
+          <Book className="h-4 w-4 mr-2" />
+          Blogs
         </Link>
       </nav>
     </div>
