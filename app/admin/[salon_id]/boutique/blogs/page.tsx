@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Plus, Search, Loader2, Calendar, Edit, Trash2, Clock } from "lucide-react";
+import { Plus, Search, Calendar, Edit, Trash2, Clock } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -58,14 +58,15 @@ export default function BlogPageClient({ salonId }: BlogPageClientProps) {
       category: { id: "2", name: "Événements" }
     }
   ]);
-  
+
   const categories: Category[] = [
     { id: "1", name: "Nouveautés" },
     { id: "2", name: "Événements" },
     { id: "3", name: "Interviews" },
-    { id: "4", name: "Conseils" },
+    { id: "4", name: "Conseils" }
   ];
 
+  // Filter blog posts based on search term and category
   const filteredPosts = blogPosts.filter((post) => {
     const matchesSearch =
       post.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -76,33 +77,40 @@ export default function BlogPageClient({ salonId }: BlogPageClientProps) {
     return matchesSearch && matchesCategory;
   });
 
+  // Handle adding a new post
   const handleAddPost = () => {
     setSelectedPost(null);
     setDialogMode("create");
     setIsDialogOpen(true);
   };
 
+  // Handle editing an existing post
   const handleEditPost = (post: BlogPost) => {
     setSelectedPost(post);
     setDialogMode("edit");
     setIsDialogOpen(true);
   };
 
+  // Success handler for the blog dialog
   const handleDialogSuccess = (newPostData: any) => {
     if (dialogMode === "create") {
       const newPost: BlogPost = {
         ...newPostData,
-        id: Math.max(...blogPosts.map(p => p.id), 0) + 1,
-        category: categories.find(cat => cat.id === newPostData.categoryId) || categories[0]
+        id: Math.max(...blogPosts.map((p) => p.id), 0) + 1,
+        category: categories.find((cat) => cat.id === newPostData.categoryId) || categories[0]
       };
       setBlogPosts([...blogPosts, newPost]);
     } else {
-      setBlogPosts(blogPosts.map(post => 
-        post.id === newPostData.id ? {
-          ...newPostData,
-          category: categories.find(cat => cat.id === newPostData.categoryId) || post.category
-        } : post
-      ));
+      setBlogPosts(
+        blogPosts.map((post) =>
+          post.id === newPostData.id
+            ? {
+                ...newPostData,
+                category: categories.find((cat) => cat.id === newPostData.categoryId) || post.category
+              }
+            : post
+        )
+      );
     }
     setIsDialogOpen(false);
   };
@@ -181,21 +189,20 @@ export default function BlogPageClient({ salonId }: BlogPageClientProps) {
                         </div>
                       )}
                       <div className="absolute top-2 right-2 flex gap-1">
-                          <motion.button
-                            whileTap={{ scale: 0.9 }}
-                            className="bg-white p-1.5 rounded-full shadow-sm"
-                            // onClick={() => handleEditProduct(product)}
-                          >
-                            <Edit className="h-3.5 w-3.5 text-amber-500" />
-                          </motion.button>
-                          <motion.button
-                            whileTap={{ scale: 0.9 }}
-                            className="bg-white p-1.5 rounded-full shadow-sm"
-                            // onClick={() => handleDeleteClick(product)}
-                          >
-                            <Trash2 className="h-3.5 w-3.5 text-red-500" />
-                          </motion.button>
-                        </div>
+                        <motion.button
+                          whileTap={{ scale: 0.9 }}
+                          className="bg-white p-1.5 rounded-full shadow-sm"
+                          onClick={() => handleEditPost(post)}
+                        >
+                          <Edit className="h-3.5 w-3.5 text-amber-500" />
+                        </motion.button>
+                        <motion.button
+                          whileTap={{ scale: 0.9 }}
+                          className="bg-white p-1.5 rounded-full shadow-sm"
+                        >
+                          <Trash2 className="h-3.5 w-3.5 text-red-500" />
+                        </motion.button>
+                      </div>
                     </div>
                     <div className="p-4 flex-grow">
                       <div className="flex justify-between items-start mb-2">
@@ -211,10 +218,10 @@ export default function BlogPageClient({ salonId }: BlogPageClientProps) {
                       <p className="text-sm text-muted-foreground mb-4 line-clamp-2">{post.excerpt}</p>
                       <div className="flex items-center text-xs text-gray-500 mt-auto">
                         <Calendar className="h-3 w-3 mr-1" />
-                        {new Date(post.date).toLocaleDateString('fr-FR', {
-                          day: 'numeric',
-                          month: 'long',
-                          year: 'numeric'
+                        {new Date(post.date).toLocaleDateString("fr-FR", {
+                          day: "numeric",
+                          month: "long",
+                          year: "numeric"
                         })}
                       </div>
                     </div>
@@ -230,10 +237,14 @@ export default function BlogPageClient({ salonId }: BlogPageClientProps) {
             </div>
             <p>Aucun article trouvé</p>
             {(searchTerm || selectedCategory) && (
-              <Button variant="link" className="mt-2 text-amber-500" onClick={() => {
-                setSearchTerm("")
-                setSelectedCategory(null)
-              }}>
+              <Button
+                variant="link"
+                className="mt-2 text-amber-500"
+                onClick={() => {
+                  setSearchTerm("");
+                  setSelectedCategory(null);
+                }}
+              >
                 Réinitialiser les filtres
               </Button>
             )}
