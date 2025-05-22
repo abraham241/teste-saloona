@@ -23,7 +23,7 @@ interface DepartmentsClientProps {
     organisationId: string
     department: {
       label: string
-      icon: string
+      icon: string | null
       id: string
     }
   }[]
