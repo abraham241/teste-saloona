@@ -1,8 +1,10 @@
-import BoutiqueAdminPageClient from "./components/product-client-page"
+// app/admin/[salon_id]/boutique/page.tsx
 
-export default async function ProductsPage({ params }: { params: Promise<{ salon_id: string }> }) {
+import BoutiqueAdminPageClient from "./components/product-client-page";
 
-  const {salon_id} = await params
+// ✅ Make sure this is NOT async
+const Page = ({ params }: { params: { salon_id: string } }) => {
+  return <BoutiqueAdminPageClient salonId={params.salon_id} />;
+};
 
-  return <BoutiqueAdminPageClient salonId={salon_id} />
-}
+export default Page;
