@@ -68,7 +68,7 @@ export default function Page() {
             </div>
 
             <div>
-              <div className="flex justify-between items-center mb-2">
+              <div className="flex justify-between  items-center mb-2">
                 <label htmlFor="password" className="block text-sm font-medium">
                   Mot de passe
                 </label>
