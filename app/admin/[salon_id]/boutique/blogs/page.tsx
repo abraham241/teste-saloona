@@ -9,6 +9,7 @@ import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import Image from "next/image";
 import { BlogsDialog } from "./components/blog-dialog";
+import { DeleteDialog } from "./components/delete-dialog";
 
 interface BlogPost {
   id: number;
@@ -35,6 +36,7 @@ export default function BlogPageClient({ salonId }: BlogPageClientProps) {
   const [selectedPost, setSelectedPost] = useState<BlogPost | null>(null);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [dialogMode, setDialogMode] = useState<"create" | "edit">("create");
+  const [showDeleteDialog, setShowDeleteDialog] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [blogPosts, setBlogPosts] = useState<BlogPost[]>([
     {
@@ -44,7 +46,7 @@ export default function BlogPageClient({ salonId }: BlogPageClientProps) {
       content: "Contenu détaillé de l'article sur la nouvelle collection...",
       date: "2023-03-15",
       readingTime: "3 min",
-      image: "/salon-1.jpg",
+      image: "/bg-5.png",
       category: { id: "1", name: "Nouveautés" }
     },
     {
@@ -54,7 +56,7 @@ export default function BlogPageClient({ salonId }: BlogPageClientProps) {
       content: "Détails sur l'événement spécial pour les clients fidèles...",
       date: "2023-04-02",
       readingTime: "4 min",
-      image: "",
+      image: "/bg-4.png",
       category: { id: "2", name: "Événements" }
     }
   ]);
@@ -86,6 +88,11 @@ export default function BlogPageClient({ salonId }: BlogPageClientProps) {
     setSelectedPost(post);
     setDialogMode("edit");
     setIsDialogOpen(true);
+  };
+
+  const handleDeletePost = (postId: number) => {
+    setBlogPosts(blogPosts.filter(post => post.id !== postId));
+    setShowDeleteDialog(false);
   };
 
   const handleDialogSuccess = (newPostData: any) => {
@@ -181,21 +188,24 @@ export default function BlogPageClient({ salonId }: BlogPageClientProps) {
                         </div>
                       )}
                       <div className="absolute top-2 right-2 flex gap-1">
-                          <motion.button
-                            whileTap={{ scale: 0.9 }}
-                            className="bg-white p-1.5 rounded-full shadow-sm"
-                            // onClick={() => handleEditProduct(product)}
-                          >
-                            <Edit className="h-3.5 w-3.5 text-amber-500" />
-                          </motion.button>
-                          <motion.button
-                            whileTap={{ scale: 0.9 }}
-                            className="bg-white p-1.5 rounded-full shadow-sm"
-                            // onClick={() => handleDeleteClick(product)}
-                          >
-                            <Trash2 className="h-3.5 w-3.5 text-red-500" />
-                          </motion.button>
-                        </div>
+                        <motion.button
+                          whileTap={{ scale: 0.9 }}
+                          className="bg-white p-1.5 rounded-full shadow-sm"
+                          onClick={() => handleEditPost(post)}
+                        >
+                          <Edit className="h-3.5 w-3.5 text-amber-500" />
+                        </motion.button>
+                        <motion.button
+                          whileTap={{ scale: 0.9 }}
+                          className="bg-white p-1.5 rounded-full shadow-sm"
+                          onClick={() => {
+                            setSelectedPost(post);
+                            setShowDeleteDialog(true);
+                          }}
+                        >
+                          <Trash2 className="h-3.5 w-3.5 text-red-500" />
+                        </motion.button>
+                      </div>
                     </div>
                     <div className="p-4 flex-grow">
                       <div className="flex justify-between items-start mb-2">
@@ -260,6 +270,17 @@ export default function BlogPageClient({ salonId }: BlogPageClientProps) {
         onSuccess={handleDialogSuccess}
         salonId={salonId}
       />
+
+      {/* Delete Dialog */}
+      {selectedPost && (
+        <DeleteDialog
+          isOpen={showDeleteDialog}
+          onClose={() => setShowDeleteDialog(false)}
+          onConfirm={async () => handleDeletePost(selectedPost.id)}
+          title="Supprimer l'article"
+          description="Êtes-vous sûr de vouloir supprimer cet article ? Cette action est irréversible."
+        />
+      )}
     </div>
   );
 }
