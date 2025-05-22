@@ -1,8 +1,20 @@
-import BoutiqueAdminPageClient from "./components/product-client-page"
+'use client'
+import { useEffect, useState } from "react";
+import BoutiqueAdminPageClient from "./components/product-client-page";
 
-export default async function ProductsPage({ params }: { params: Promise<{ salon_id: string }> }) {
+const Page = () => {
+  const [salonId, setSalonId] = useState<string | null>(null);
 
-  const {salon_id} = await params
+  useEffect(() => {
+    const match = window.location.href.match(/\/admin\/([^/]+)\/services\/departments/);
+    if (match) {
+      setSalonId(match[1]);
+    }
+  }, []);
 
-  return <BoutiqueAdminPageClient salonId={salon_id} />
-}
+  if (!salonId) return <div>Chargement...</div>;
+
+  return <BoutiqueAdminPageClient salonId={salonId} />;
+};
+
+export default Page;
